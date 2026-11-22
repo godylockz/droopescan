@@ -1,5 +1,10 @@
-from cement.utils import test
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""HTTP behavior tests."""
+
+# Imports
 from concurrent.futures import ThreadPoolExecutor, Future
+from collections import Counter
 from dscan.common import file_len, base_url, ProgressBar, StandardOutput
 from dscan.common import ScanningMethod, Verb, Enumerate
 from dscan.common.testutils import decallmethods
@@ -7,6 +12,7 @@ from dscan import common
 from dscan.plugins.drupal import Drupal
 from dscan.plugins.internal.base_plugin_internal import BasePluginInternal
 from dscan.tests import BaseTest
+from dscan.tests.compat import test
 from mock import patch, MagicMock, ANY, mock_open
 from requests.exceptions import ConnectionError
 import requests
@@ -295,12 +301,14 @@ class BaseHttpTests(BaseTest):
 
     def test_determine_detect_false_ok_drupal(self):
         self.add_argv(self.param_plugins)
+        self.add_argv(["--verb", "get"])
 
-        responses.add(responses.HEAD, self.base_url +
+        responses.add(responses.GET, self.base_url, status=200)
+        responses.add(responses.GET, self.base_url +
                 self.scanner.not_found_url, body='A'*1337)
-        responses.add(responses.HEAD, self.base_url +
+        responses.add(responses.GET, self.base_url +
                 'misc/drupal.js', body='A'*15000)
-        responses.add(responses.HEAD, self.base_url + Drupal.forbidden_url)
+        responses.add(responses.GET, self.base_url + Drupal.forbidden_url)
 
         m = self.mock_controller('drupal', 'enumerate_plugins')
 
@@ -788,19 +796,14 @@ class BaseHttpTests(BaseTest):
                 h.return_value.status_code = 200
                 self.app.run()
 
-                calls = h.call_args_list
-
-                args, kwargs = calls[0]
-                assert args[1] == 'http://192.168.1.1/'
-                assert kwargs['headers']['Host'] == 'example.com'
-
-                args, kwargs = calls[1]
-                assert args[1] == 'http://192.168.1.1/'
-                assert kwargs['headers']['Host'] == 'example.com'
-
-                args, kwargs = calls[2]
-                assert args[1] == 'http://192.168.1.2/drupal/'
-                assert kwargs['headers']['Host'] == 'example.com'
+                calls = Counter(
+                    (args[1], kwargs["headers"]["Host"])
+                    for args, kwargs in h.call_args_list
+                )
+                assert calls == Counter({
+                    ("http://192.168.1.1/", "example.com"): 2,
+                    ("http://192.168.1.2/drupal/", "example.com"): 1,
+                })
 
     @patch('requests.Session.head', return_value=FakeRequest())
     def test_respects_host_redirect(self, mock_head):

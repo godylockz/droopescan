@@ -1,4 +1,8 @@
-from cement.utils import test
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""CMS fingerprint tests."""
+
+# Imports
 from dscan.common.testutils import decallmethods, xml_validate
 from dscan.common import VersionsFile
 from glob import glob
@@ -8,6 +12,7 @@ from dscan.plugins.drupal import Drupal
 from dscan.plugins.internal.scan import Scan
 from requests.exceptions import ConnectionError
 from dscan.tests import BaseTest
+from dscan.tests.compat import test
 import dscan
 import hashlib
 import requests

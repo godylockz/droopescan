@@ -1,13 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""Droopescan command-line application."""
 
 from __future__ import print_function
-from cement.core import backend, foundation, controller, handler
-from cement.utils.misc import init_defaults
+
+# Imports
+from cement.core import foundation, controller, handler
 from dscan.common.functions import template, version_get
 from dscan import common
 from dscan.plugins import Scan
 import dscan
-import os
 import signal
 import sys
 

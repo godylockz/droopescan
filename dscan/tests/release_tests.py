@@ -1,7 +1,12 @@
-from cement.utils import test
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""Release helper tests."""
+
+# Imports
 from dscan.common.testutils import decallmethods
 from dscan import plugins
 from dscan.tests import BaseTest
+from dscan.tests.compat import test
 from mock import patch, MagicMock, mock_open, Mock, create_autospec
 import dscan.common.release_api as ra
 import dscan.plugins.release

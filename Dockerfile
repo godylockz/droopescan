@@ -11,6 +11,6 @@ LABEL org.label-schema.name="droopescan" \
 
 COPY . /app
 WORKDIR /app
-RUN pip install -r requirements.txt
+RUN pip install .
 ENTRYPOINT ["droopescan"]
 CMD ["--help"]

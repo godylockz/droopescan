@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""Internal test command."""
+
+# Imports
 from cement.core import handler, controller
 from dscan.plugins import HumanBasePlugin
 from subprocess import call
@@ -29,10 +34,6 @@ class Tests(HumanBasePlugin):
         arguments = [
             (['-s', '--single-test'], dict(action='store', help='Name of test to run',
                 required=False, default=None)),
-            (['-3', '--just-three'], dict(action='store_true', help='Just run python 3 tests.',
-                required=False, default=True)),
-            (['-2', '--just-two'], dict(action='store_true', help='Just run python 2 tests.',
-                required=False, default=None)),
             (['-c', '--with-coverage'], dict(action='store_true', help='Do test coverage',
                 required=False, default=False)),
         ]
@@ -42,32 +43,18 @@ class Tests(HumanBasePlugin):
         env = {}
         single_test = self.app.pargs.single_test
         with_coverage = self.app.pargs.with_coverage
-        just_three = self.app.pargs.just_three
-        just_two = self.app.pargs.just_two
-
         if single_test and with_coverage:
             self.error('Cannot run with both -c and -s.')
 
-        exit = 0
         if not single_test:
-            call_base = ['/usr/local/bin/nosetests', '--exclude=async']
-
+            call_base = [sys.executable]
             if with_coverage:
-                call_base += ['--with-coverage', '--cover-package', 'dscan',
-                        '--cover-inclusive', '--cover-html']
-
-            if not just_three:
-                e1 = call(['python2'] + call_base, env=env)
-            else:
-                e1 = 0
-
-            if not just_two:
-                e2 = call(['python3'] + call_base, env=env)
-            else:
-                e2 = 0
-
-            if e1 != 0 or e2 != 0:
-                exit = 1
+                call_base += ['-m', 'coverage', 'run', '--source=dscan']
+            call_base += [
+                '-m', 'unittest', 'discover', '-s', 'dscan/tests',
+                '-p', '*_tests.py'
+            ]
+            exit = call(call_base, env=env)
 
         else:
             test_file = recursive_grep(dscan.PWD + 'tests/', single_test + "(")
@@ -79,12 +66,8 @@ class Tests(HumanBasePlugin):
             underscore = '_'.join(tna)
             upper = "".join(w.capitalize() for w in tna)
 
-            test = 'dscan.tests.%s_tests:%sTests.%s' % (underscore, upper, single_test)
-
-            if just_two:
-                exit = call(['python2', '/usr/local/bin/nosetests', '--nocapture', test], env=env)
-            else:
-                exit = call(['python3', '/usr/local/bin/nosetests', '--nocapture', test], env=env)
+            test = 'dscan.tests.%s_tests.%sTests.%s' % (underscore, upper, single_test)
+            exit = call([sys.executable, '-m', 'unittest', test], env=env)
 
         sys.exit(exit)
 
