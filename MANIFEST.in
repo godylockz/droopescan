@@ -1,6 +1,5 @@
 include *.md
-include *.txt
-include .travis.yml
 include CHANGELOG
 include LICENSE
 recursive-include dscan *
+global-exclude *.py[cod]

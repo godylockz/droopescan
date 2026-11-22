@@ -1,10 +1,15 @@
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""Shared Droopescan test fixtures."""
+
+# Imports
 from cement.core import controller, foundation, backend, handler
-from cement.utils import test
 from cement.utils.misc import init_defaults
 from dscan.common.testutils import decallmethods
 from dscan.droopescan import DroopeScan
 from dscan.plugins.drupal import Drupal
 from dscan.plugins import Scan
+from dscan.tests.compat import test
 from lxml import etree
 from mock import patch, MagicMock
 import os
@@ -170,9 +175,14 @@ class BaseTest(test.CementTestCase):
         for status_code in data_obj:
             for item in data_obj[status_code]:
                 url = base_url % item
-                responses.add(verb, url,
-                        body=str(status_code), status=status_code,
-                        adding_headers=headers)
+                body = "" if verb == responses.HEAD else str(status_code)
+                responses.add(
+                    verb,
+                    url,
+                    body=body,
+                    status=status_code,
+                    adding_headers=headers,
+                )
 
     def mock_all_enumerate(self, plugin_name):
         all = []

@@ -1,11 +1,26 @@
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""Release-maintenance helpers."""
+
 from __future__ import print_function
-from distutils.util import strtobool
+
+# Imports
 import dscan.common.functions as f
 import dscan
 import os.path
 import subprocess
 import sys
 import tempfile
+
+
+def strtobool(value):
+    """Convert common yes/no strings to booleans."""
+    normalized = value.lower()
+    if normalized in ("y", "yes", "t", "true", "on", "1"):
+        return True
+    if normalized in ("n", "no", "f", "false", "off", "0"):
+        return False
+    raise ValueError("invalid truth value %r" % value)
 
 CHANGELOG = './CHANGELOG'
 TEST_RUNS_BASE = ['./droopescan']

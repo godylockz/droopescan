@@ -1,6 +1,11 @@
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""Shared output methods for interactive Droopescan controllers."""
+
 from __future__ import print_function
+
+# Imports
 from cement.core import handler, controller
-from distutils.util import strtobool
 import dscan.common.functions as f
 import sys
 

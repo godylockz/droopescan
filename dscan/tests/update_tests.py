@@ -1,4 +1,8 @@
-from cement.utils import test
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""CMS metadata update tests."""
+
+# Imports
 from dscan.common import VersionsFile
 from dscan.common.exceptions import MissingMajorException
 from dscan.common.testutils import decallmethods
@@ -13,6 +17,7 @@ from dscan.plugins.silverstripe import Silverstripe
 from dscan.plugins.wordpress import Wordpress
 from dscan.plugins.update import Update
 from dscan.tests import BaseTest
+from dscan.tests.compat import test
 from mock import patch, MagicMock, mock_open, Mock, create_autospec
 import codecs
 import dscan

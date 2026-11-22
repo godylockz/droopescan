@@ -1,5 +1,10 @@
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""Offline end-to-end scanner tests."""
+
 from __future__ import print_function
-from cement.utils import test
+
+# Imports
 from dscan.common.testutils import decallmethods
 from dscan.tests import BaseTest, MockHash
 from mock import MagicMock

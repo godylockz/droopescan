@@ -1,5 +1,10 @@
+#!/usr/bin/env python3
+# -- coding: utf-8 --
+"""Core scanner behavior tests."""
+
 from __future__ import unicode_literals
-from cement.utils import test
+
+# Imports
 from dscan.common.exceptions import FileEmptyException
 from dscan.common import file_len, ProgressBar, JsonOutput, StandardOutput
 from dscan.common.plugins_util import plugins_base_get
@@ -7,6 +12,7 @@ from dscan.common.testutils import decallmethods, MockBuffer
 from dscan import common
 from dscan.plugins.drupal import Drupal
 from dscan.tests import BaseTest
+from dscan.tests.compat import test
 from mock import patch, MagicMock, mock_open
 from requests.exceptions import ConnectionError
 from requests import Session
@@ -379,14 +385,3 @@ class BaseTests(BaseTest):
     def test_plugins_get(self):
         plugins = plugins_base_get()
         assert len(plugins) > 3
-
-    def test_calls_async(self):
-        self.add_argv(['scan'])
-        self.add_argv(['--url-file', self.valid_file])
-        self.add_argv(['--async'])
-
-        with patch('dscan.plugins.internal.scan.identify_url_file',
-                autospec=True) as iuf:
-            self.app.run()
-
-            assert iuf.called

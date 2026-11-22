@@ -1,8 +1,11 @@
 # droopescan
 
-[![Build Status](https://api.travis-ci.org/droope/droopescan.svg?branch=master)](https://travis-ci.org/droope/droopescan)
-[![PyPI version](https://img.shields.io/pypi/v/droopescan.svg)](https://pypi.python.org/pypi/droopescan)
-[![AGPL license](https://img.shields.io/badge/license-AGPL-blue.svg)](https://github.com/droope/droopescan/blob/master/LICENSE)
+[![Test](https://github.com/godylockz/droopescan/actions/workflows/test.yml/badge.svg)](https://github.com/godylockz/droopescan/actions/workflows/test.yml)
+[![AGPL license](https://img.shields.io/badge/license-AGPL-blue.svg)](LICENSE)
+
+This maintained fork keeps the upstream scanner working on current Python
+releases. It preserves the existing CLI and scan output while replacing the
+obsolete Python 2, nose, distutils, and installer-hook plumbing.
 
 A plugin-based scanner that aids security researchers in identifying issues with
 several CMS.
@@ -95,22 +98,18 @@ Because droopescan:
 Installation is easy using pip:
 
 ```bash
-apt-get install python-pip
-pip install droopescan
+python -m pip install "git+https://github.com/godylockz/droopescan.git"
 ```
 
 ## From sources
 Manual installation is as follows:
 
 ```bash
-git clone https://github.com/droope/droopescan.git
+git clone https://github.com/godylockz/droopescan.git
 cd droopescan
-pip install -r requirements.txt
-./droopescan scan --help
+python -m pip install .
+droopescan scan --help
 ```
-
-The master branch corresponds to the latest release (what is in pypi).
-Development branch is unstable and all pull requests must be made against it.
 
 ## BlackArch
 BlackArch [package](https://github.com/BlackArch/blackarch/blob/master/packages/droopescan/PKGBUILD) installation (maintained by a third party):

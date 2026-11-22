@@ -1,3 +1,9 @@
+1.45.1.post1
+============
+
+* Add maintained Python 3.11 through 3.15 packaging, tests, and CI.
+* Replace nose and distutils compatibility code.
+
 1.45.1
 ======
 
